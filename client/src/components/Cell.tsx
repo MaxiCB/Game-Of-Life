@@ -8,11 +8,11 @@ const colorSwitch = (state: string) => {
     case "dying":
       return "red";
     default:
-      break;
+      return "black";
   }
 };
 
-const Cell: React.FC<CellProps> = ({ state, size, x, y }) => {
+const GameCell: React.FC<CellProps> = ({ state, size, x, y }) => {
   return (
     <div
       style={{
@@ -27,4 +27,4 @@ const Cell: React.FC<CellProps> = ({ state, size, x, y }) => {
   );
 };
 
-export default Cell;
+export default GameCell;

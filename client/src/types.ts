@@ -24,6 +24,7 @@ export interface OffsetReturn {
 }
 
 export interface Cell {
+  state: string;
   x: number;
   y: number;
 }
