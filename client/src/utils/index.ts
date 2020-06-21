@@ -1,11 +1,11 @@
-import { GameType, OffsetReturn, Offset } from "../types";
+import { GameType, OffsetReturn, Offset, Cell } from "../types";
 
 export const makeEmptyBoard = (grid: GameType) => {
   let temp: any[][] = [];
-  for (let i = 0; i < grid.rows; i++) {
-    temp[i] = [];
-    for (let j = 0; j < grid.cols; j++) {
-      temp[i][j] = false;
+  for (let y = 0; y < grid.rows; y++) {
+    temp[y] = [];
+    for (let x = 0; x < grid.cols; x++) {
+      temp[y][x] = false;
     }
   }
   return temp;
@@ -13,12 +13,10 @@ export const makeEmptyBoard = (grid: GameType) => {
 
 export const makeCells = (board: any[][], grid: GameType) => {
   let temp = [];
-  if (board.length > 0) {
-    for (let i = 0; i < grid.rows; i++) {
-      for (let j = 0; j < grid.cols; j++) {
-        if (board[i][j]) {
-          temp.push({ state: "alive", x: j, y: i });
-        }
+  for (let y = 0; y < grid.rows; y++) {
+    for (let x = 0; x < grid.cols; x++) {
+      if (board[y][x]) {
+        temp.push({ state: "alive", x: x, y: y });
       }
     }
   }
@@ -61,6 +59,19 @@ export const getElementOffset = (elem: HTMLDivElement): OffsetReturn => {
   return { offset: { x: x, y: y }, rect: rect };
 };
 
+// All possible directions
+// Cardinals && Diagonals
+const dirs = [
+  [-1, -1],
+  [-1, 0],
+  [-1, 1],
+  [0, 1],
+  [1, 1],
+  [1, 0],
+  [1, -1],
+  [0, -1],
+];
+
 export const findNeighbors = (
   grid: GameType,
   board: any[][],
@@ -68,21 +79,16 @@ export const findNeighbors = (
   y: number
 ) => {
   let neighbors = 0;
-  const dirs = [
-    [-1, -1],
-    [-1, 0],
-    [-1, 1],
-    [0, 1],
-    [1, 1],
-    [1, 0],
-    [1, -1],
-    [0, -1],
-  ];
+  // Loop over all possible directions for neighbors
   for (let i = 0; i < dirs.length; i++) {
+    // Calculate neighbors coordinates using the dirs array
     const dir = dirs[i];
     let y1 = y + dir[0];
     let x1 = x + dir[1];
 
+    // Ensure all points are within the grid
+    // And check if the cell we are looking at is alive
+    // If so add to the neighbors count
     if (
       x1 >= 0 &&
       x1 < grid.cols &&
@@ -98,21 +104,30 @@ export const findNeighbors = (
 };
 
 export const runIteration = (grid: GameType, board: any[][]) => {
+  // Create a new board
+  let new_board = makeEmptyBoard(grid);
+  // Iterate over all rows and columns
   for (let y = 0; y < grid.rows; y++) {
     for (let x = 0; x < grid.cols; x++) {
+      // Fins all neighbors of the current cell
       let neighbors = findNeighbors(grid, board, x, y);
+      // If the cell is alive
       if (board[y][x]) {
+        // Remain alive if 2 || 3 neighbors
+        // Else cell dies
         if (neighbors === 2 || neighbors === 3) {
-          board[y][x] = true;
+          new_board[y][x] = true;
         } else {
-          board[y][x] = false;
+          new_board[y][x] = false;
         }
+        // If cell is dead and has 3 neighbors revive
       } else {
         if (!board[y][x] && neighbors === 3) {
-          board[y][x] = true;
-        } 
+          new_board[y][x] = true;
+        }
       }
     }
   }
-  return makeCells(board, grid);
+
+  return makeCells(new_board, grid);
 };

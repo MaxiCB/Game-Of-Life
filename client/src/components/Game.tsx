@@ -15,8 +15,8 @@ import {
 const Game: React.FC = () => {
   const [cellSize, setCellSize] = React.useState<number>(20);
   const [gridSize, setGridSize] = React.useState<Grid>({
-    width: 800,
-    height: 800,
+    width: 100,
+    height: 100,
   });
   const [grid, setGrid] = React.useState<GameType>({
     rows: gridSize.height / cellSize,
