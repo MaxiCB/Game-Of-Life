@@ -1,9 +1,8 @@
-import { Offset } from "../types";
+import { Offset, Board, GameType, Cell, Grid } from "../types";
 
 export const SET_CELL_SIZE = "SET_CELL_SIZE";
 export const SET_GRID_SIZE = "SET_GRID_SIZE";
-export const SET_GRID_ROW = "SET_GRID_ROW";
-export const SET_GRID_COL = "SET_GRID_COL";
+export const SET_GRID = "SET_GRID";
 export const SET_BOARD = "SET_BOARD";
 export const SET_CELLS = "SET_CELLS";
 export const SET_OFFSET = "SET_OFFSET";
@@ -11,11 +10,10 @@ export const SET_RECT = "SET_RECT";
 
 export interface AppState {
   cell_size: number;
-  grid_size: number;
-  grid_rows: number;
-  grid_cols: number;
-  board: [];
-  cells: [];
+  grid: GameType;
+  grid_size: Grid;
+  board: boolean[][];
+  cells: Cell[];
   offset: Offset | null;
   rect: DOMRect | null;
 }
@@ -25,28 +23,24 @@ interface SetCellSizeAction {
   payload: number;
 }
 
-interface SetGridSizeAction {
-  type: typeof SET_GRID_SIZE;
-  payload: number;
+interface SetGridAction {
+  type: typeof SET_GRID;
+  payload: GameType;
 }
 
-interface SetGridRowsAction {
-  type: typeof SET_GRID_ROW;
-  payload: number;
-}
-interface SetGridColsAction {
-  type: typeof SET_GRID_COL;
-  payload: number;
+interface SetGridSizeAction {
+  type: typeof SET_GRID_SIZE;
+  payload: Grid;
 }
 
 interface SetBoardAction {
   type: typeof SET_BOARD;
-  payload: [];
+  payload: any[][];
 }
 
 interface SetCellsAction {
   type: typeof SET_CELLS;
-  payload: [];
+  payload: Cell[];
 }
 interface SetOffsetAction {
   type: typeof SET_OFFSET;
@@ -60,9 +54,8 @@ interface SetRectAction {
 
 export type AppStatActions =
   | SetCellSizeAction
+  | SetGridAction
   | SetGridSizeAction
-  | SetGridRowsAction
-  | SetGridColsAction
   | SetBoardAction
   | SetCellsAction
   | SetOffsetAction

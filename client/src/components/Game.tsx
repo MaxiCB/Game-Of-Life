@@ -1,4 +1,12 @@
 import React from "react";
+// Redux
+import { connect } from "react-redux";
+// Actions
+import {
+  make_empty_board,
+  get_element_offset,
+  run_iteration,
+} from "../store/actions";
 // Components
 import GameCell from "../components/Cell";
 // Types and Utils
@@ -11,17 +19,23 @@ import {
   makeCells,
   runIteration,
 } from "../utils";
+import { AppState } from "../store/types";
 
-const Game: React.FC = () => {
+interface GameProps {
+  make_empty_board: typeof make_empty_board;
+  grid: GameType;
+}
+
+const Game: React.FC<GameProps> = ({ make_empty_board, grid }) => {
   const [cellSize, setCellSize] = React.useState<number>(20);
   const [gridSize, setGridSize] = React.useState<Grid>({
     width: 100,
     height: 100,
   });
-  const [grid, setGrid] = React.useState<GameType>({
-    rows: gridSize.height / cellSize,
-    cols: gridSize.width / cellSize,
-  });
+  // const [grid, setGrid] = React.useState<GameType>({
+  //   rows: gridSize.height / cellSize,
+  //   cols: gridSize.width / cellSize,
+  // });
   const [board, setBoard] = React.useState<any[][]>([]);
   const [cells, setCells] = React.useState<Cell[]>([]);
 
@@ -30,7 +44,8 @@ const Game: React.FC = () => {
   const [rect, setRect] = React.useState<DOMRect>();
 
   React.useEffect(() => {
-    setBoard(makeEmptyBoard(grid));
+    make_empty_board();
+    // setBoard(makeEmptyBoard(grid));
   }, []);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -98,8 +113,10 @@ const Game: React.FC = () => {
         <button
           className="button"
           onClick={(_) => {
-            setBoard(makeEmptyBoard(grid));
-            setCells(makeCells(board, grid));
+            const new_board = makeEmptyBoard(grid);
+            setBoard(new_board);
+            const new_cells = makeCells(board, grid);
+            setCells(new_cells);
           }}
         >
           Clear
@@ -117,4 +134,11 @@ const Game: React.FC = () => {
   );
 };
 
-export default Game;
+const mapStateToProps = (state: AppState) => {
+  return {
+    make_empty_board: make_empty_board,
+    grid: state.grid,
+  };
+};
+
+export default connect(mapStateToProps, { make_empty_board })(Game);

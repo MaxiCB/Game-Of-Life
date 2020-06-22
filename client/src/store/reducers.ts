@@ -1,8 +1,7 @@
 import {
   SET_CELL_SIZE,
   SET_GRID_SIZE,
-  SET_GRID_ROW,
-  SET_GRID_COL,
+  SET_GRID,
   SET_BOARD,
   SET_CELLS,
   SET_OFFSET,
@@ -10,12 +9,19 @@ import {
   AppState,
   AppStatActions,
 } from "./types";
+import { GameType, Grid } from "../types";
+
+const default_grid_size: Grid = { width: 100, height: 100 };
+const default_cell_size: number = 20;
+const default_grid: GameType = {
+  rows: default_grid_size.height / default_cell_size,
+  cols: default_grid_size.height / default_cell_size,
+};
 
 export const initialState: AppState = {
-  cell_size: 20,
-  grid_size: 800,
-  grid_rows: 800 / 20,
-  grid_cols: 800 / 20,
+  cell_size: default_cell_size,
+  grid: default_grid,
+  grid_size: default_grid_size,
   board: [],
   cells: [],
   offset: null,
@@ -37,15 +43,10 @@ export const reducer = (
         ...state,
         grid_size: action.payload,
       };
-    case SET_GRID_ROW:
+    case SET_GRID:
       return {
         ...state,
-        grid_rows: action.payload,
-      };
-    case SET_GRID_COL:
-      return {
-        ...state,
-        grid_cols: action.payload,
+        grid: action.payload,
       };
     case SET_BOARD:
       return {
