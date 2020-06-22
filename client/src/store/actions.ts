@@ -17,7 +17,7 @@ import { ThunkDispatch } from "redux-thunk";
 export const make_empty_board = () => (
   dispatch: Dispatch,
   getState: () => AppState
-) => {
+): any => {
   // Grabbing the grid from state
   const state = getState();
   const grid = state.grid;
@@ -34,6 +34,7 @@ export const make_empty_board = () => (
     }
   }
   dispatch({ type: SET_BOARD, payload: temp });
+  return temp;
 };
 
 // Setting of the cells
@@ -147,16 +148,23 @@ export const run_iteration = () => (
   // Create a new board
   const state = getState();
   const grid = state.grid;
-  let old_board = state.board;
-  make_empty_board();
-  let new_board = state.board;
+  let new_board: boolean[][] = [];
+  for (let y = 0; y < grid.rows; y++) {
+    // Setting the y/row to empty array
+    new_board[y] = [];
+    // Iterating over all cols
+    for (let x = 0; x < grid.cols; x++) {
+      // Adding cell state to [y][x]
+      new_board[y][x] = false;
+    }
+  }
   // Iterate over all rows and columns
   for (let y = 0; y < grid.rows; y++) {
     for (let x = 0; x < grid.cols; x++) {
       // Fins all neighbors of the current cell
-      let neighbors = find_neighbors(grid, old_board, x, y);
+      let neighbors = find_neighbors(grid, state.board, x, y);
       // If the cell is alive
-      if (old_board[y][x]) {
+      if (state.board[y][x]) {
         // Remain alive if 2 || 3 neighbors
         // Else cell dies
         if (neighbors === 2 || neighbors === 3) {
@@ -166,7 +174,7 @@ export const run_iteration = () => (
         }
         // If cell is dead and has 3 neighbors revive
       } else {
-        if (!old_board[y][x] && neighbors === 3) {
+        if (!state.board[y][x] && neighbors === 3) {
           new_board[y][x] = true;
         }
       }

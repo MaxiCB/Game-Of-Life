@@ -48,10 +48,24 @@ const Game: React.FC<GameProps> = ({
   cell_size,
   cells,
 }) => {
+  const [interval, setTimerInterval] = React.useState<NodeJS.Timeout | null>(
+    null
+  );
+
   React.useEffect(() => {
     make_empty_board();
     make_cells();
   }, []);
+
+  let timeout_handler: NodeJS.Timeout | null = null;
+
+  const run_game = () => {
+    let temp = setInterval(() => {
+      run_iteration();
+      make_cells();
+    }, 300);
+    setTimerInterval(temp);
+  };
 
   return (
     <div>
@@ -93,6 +107,17 @@ const Game: React.FC<GameProps> = ({
           }}
         >
           Run 1X
+        </button>
+        <button onClick={(_) => run_game()}>Run</button>
+        <button
+          onClick={(_) => {
+            if (interval) {
+              clearInterval(interval);
+              setTimerInterval(null);
+            }
+          }}
+        >
+          Stop
         </button>
       </div>
     </div>

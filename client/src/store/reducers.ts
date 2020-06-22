@@ -13,10 +13,10 @@ import {
 export const initialState: AppState = {
   cell_size: 20,
   grid: {
-    rows: 100 / 20,
-    cols: 100 / 20,
+    rows: 800 / 20,
+    cols: 800 / 20,
   },
-  grid_size: { width: 100, height: 100 },
+  grid_size: { width: 800, height: 800 },
   board: [],
   cells: [],
   offset: null,
