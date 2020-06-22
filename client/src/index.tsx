@@ -6,15 +6,21 @@ import "./styles/index.css";
 import "./styles/App.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+import { createStore, applyMiddleware } from "redux";
+import { reducer } from "./store/reducers";
+import logger from "redux-logger";
+import thunk from "redux-thunk";
 
-const store = configureStore();
+const store = createStore(reducer, applyMiddleware(thunk, logger));
+const test = store.getState();
+console.log(test.grid);
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
+  <Provider store={store}>
+    <React.StrictMode>
       <App />
-    </Provider>
-  </React.StrictMode>,
+    </React.StrictMode>
+  </Provider>,
   document.getElementById("root")
 );
 

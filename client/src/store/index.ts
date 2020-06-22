@@ -8,7 +8,7 @@ const rootReducer = combineReducers({
   app: reducer,
 });
 
-export type AppState = ReturnType<typeof rootReducer>;
+export type AppState = ReturnType<typeof reducer>;
 
 export default function configureStore() {
   const store = createStore(rootReducer, applyMiddleware(thunk, logger));

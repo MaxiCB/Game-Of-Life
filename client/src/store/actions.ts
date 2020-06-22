@@ -9,13 +9,9 @@ import {
 } from "./types";
 
 import { Dispatch } from "redux";
-import { GameType, Cell, OffsetReturn } from "../types";
+import { GameType, Cell } from "../types";
 import { AppState } from ".";
-
-export const testRedux = (message: string) => (dispatch: Dispatch) => {
-  dispatch({ type: SET_CELL_SIZE, payload: 200 });
-  console.log(message);
-};
+import { ThunkDispatch } from "redux-thunk";
 
 // Creation of the empty board
 export const make_empty_board = () => (
@@ -24,7 +20,7 @@ export const make_empty_board = () => (
 ) => {
   // Grabbing the grid from state
   const state = getState();
-  const grid = state.app.grid;
+  const grid = state.grid;
   // Temporary holder of the grid we will create
   let temp: boolean[][] = [];
   // Iterating over rows
@@ -41,9 +37,14 @@ export const make_empty_board = () => (
 };
 
 // Setting of the cells
-export const make_cells = (board: boolean[][], grid: GameType) => (
-  dispatch: Dispatch
+export const make_cells = () => (
+  dispatch: Dispatch,
+  getState: () => AppState
 ) => {
+  const state = getState();
+  const board = state.board;
+  const grid = state.grid;
+
   // Temporary hold of the board with cells
   let temp: Cell[] = [];
   //   Iterate over rows && cols and add cell to array
@@ -54,6 +55,7 @@ export const make_cells = (board: boolean[][], grid: GameType) => (
       }
     }
   }
+
   dispatch({ type: SET_CELLS, payload: temp });
 };
 
@@ -70,7 +72,28 @@ export const get_element_offset = (elem: HTMLDivElement) => (
   dispatch({ type: SET_RECT, payload: rect });
 };
 
-// Setting grid size
+export const handle_board_click = (
+  e: React.MouseEvent<HTMLDivElement, MouseEvent>
+) => (
+  dispatch: Dispatch,
+  getState: () => AppState,
+  action: ThunkDispatch<{}, {}, any>
+) => {
+  const state = getState();
+  const board = state.board;
+  let new_board = state.board;
+
+  const xOff = e.clientX - state.offset!.x;
+  const yOff = e.clientY - state.offset!.y;
+  const x = Math.floor(xOff / state.cell_size);
+  const y = Math.floor(yOff / state.cell_size);
+
+  if (x >= 0 && x <= state.grid.cols && y >= 0 && y <= state.grid.rows) {
+    new_board[y][x] = !board[y][x];
+  }
+
+  dispatch({ type: SET_BOARD, payload: new_board });
+};
 
 // Defining all possible neighbor direction
 const dirs = [
@@ -115,23 +138,25 @@ export const find_neighbors = (
 
   return neighbors;
 };
+
 // Running an iteration
-// This may be a source of any bugs
-// May need to grab a reference before we empty the board
-export const run_iteration = (grid: GameType, board: any[][]) => (
+export const run_iteration = () => (
+  dispatch: Dispatch,
   getState: () => AppState
 ) => {
   // Create a new board
   const state = getState();
-  let new_board = state.app.board;
+  const grid = state.grid;
+  let old_board = state.board;
   make_empty_board();
+  let new_board = state.board;
   // Iterate over all rows and columns
   for (let y = 0; y < grid.rows; y++) {
     for (let x = 0; x < grid.cols; x++) {
       // Fins all neighbors of the current cell
-      let neighbors = find_neighbors(grid, board, x, y);
+      let neighbors = find_neighbors(grid, old_board, x, y);
       // If the cell is alive
-      if (board[y][x]) {
+      if (old_board[y][x]) {
         // Remain alive if 2 || 3 neighbors
         // Else cell dies
         if (neighbors === 2 || neighbors === 3) {
@@ -141,12 +166,12 @@ export const run_iteration = (grid: GameType, board: any[][]) => (
         }
         // If cell is dead and has 3 neighbors revive
       } else {
-        if (!board[y][x] && neighbors === 3) {
+        if (!old_board[y][x] && neighbors === 3) {
           new_board[y][x] = true;
         }
       }
     }
   }
 
-  make_cells(new_board, grid);
+  dispatch({ type: SET_BOARD, payload: new_board });
 };

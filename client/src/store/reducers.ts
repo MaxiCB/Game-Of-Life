@@ -9,19 +9,14 @@ import {
   AppState,
   AppStatActions,
 } from "./types";
-import { GameType, Grid } from "../types";
-
-const default_grid_size: Grid = { width: 100, height: 100 };
-const default_cell_size: number = 20;
-const default_grid: GameType = {
-  rows: default_grid_size.height / default_cell_size,
-  cols: default_grid_size.height / default_cell_size,
-};
 
 export const initialState: AppState = {
-  cell_size: default_cell_size,
-  grid: default_grid,
-  grid_size: default_grid_size,
+  cell_size: 20,
+  grid: {
+    rows: 100 / 20,
+    cols: 100 / 20,
+  },
+  grid_size: { width: 100, height: 100 },
   board: [],
   cells: [],
   offset: null,
