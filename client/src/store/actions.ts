@@ -7,6 +7,7 @@ import {
   SET_OFFSET,
   SET_RECT,
   SET_ITERATIONS,
+  SET_RUNNING,
 } from "./types";
 
 import { Dispatch } from "redux";
@@ -109,7 +110,6 @@ export const handle_board_click = (
   const state = getState();
   const board = state.board;
   let new_board = state.board;
-
   const xOff = e.clientX - state.offset!.x;
   const yOff = e.clientY - state.offset!.y;
   const x = Math.floor(xOff / state.cell_size);
@@ -209,4 +209,8 @@ export const run_iteration = () => (
 
   dispatch({ type: SET_BOARD, payload: new_board });
   dispatch({ type: SET_ITERATIONS, payload: state.iterations += 1 });
+};
+
+export const toggle_running = (state: boolean) => (dispatch: Dispatch) => {
+  dispatch({ type: SET_RUNNING, payload: state });
 };

@@ -9,6 +9,7 @@ import {
   AppState,
   AppStatActions,
   SET_ITERATIONS,
+  SET_RUNNING,
 } from "./types";
 
 export const initialState: AppState = {
@@ -23,6 +24,7 @@ export const initialState: AppState = {
   offset: null,
   rect: null,
   iterations: 0,
+  running: false,
 };
 
 export const reducer = (
@@ -69,6 +71,11 @@ export const reducer = (
       return {
         ...state,
         iterations: action.payload,
+      };
+    case SET_RUNNING:
+      return {
+        ...state,
+        running: action.payload,
       };
     default:
       return state;

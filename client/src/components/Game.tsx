@@ -9,6 +9,7 @@ import {
   run_iteration,
   handle_board_click,
   make_random_board,
+  toggle_running,
 } from "../store/actions";
 // Components
 import GameCell from "../components/Cell";
@@ -23,6 +24,8 @@ interface GameProps {
   make_cells: typeof make_cells;
   run_iteration: typeof run_iteration;
   make_random_board: typeof make_random_board;
+  toggle_running: typeof toggle_running;
+  running: boolean;
   grid: GameType;
   rect: DOMRect | null;
   grid_size: Grid;
@@ -38,6 +41,8 @@ const Game: React.FC<GameProps> = ({
   make_cells,
   run_iteration,
   make_random_board,
+  toggle_running,
+  running,
   grid,
   rect,
   grid_size,
@@ -58,6 +63,7 @@ const Game: React.FC<GameProps> = ({
   let timeout_handler: NodeJS.Timeout | null = null;
 
   const run_game = () => {
+    toggle_running(true);
     let temp = setInterval(() => {
       run_iteration();
       make_cells();
@@ -75,8 +81,10 @@ const Game: React.FC<GameProps> = ({
           backgroundSize: `${cell_size}px ${cell_size}px`,
         }}
         onClick={(e) => {
-          handle_board_click(e);
-          make_cells();
+          if (!running) {
+            handle_board_click(e);
+            make_cells();
+          }
         }}
         ref={(el) => {
           if (!el) {
@@ -110,6 +118,7 @@ const Game: React.FC<GameProps> = ({
         <button onClick={(_) => run_game()}>Run</button>
         <button
           onClick={(_) => {
+            toggle_running(false);
             if (interval) {
               clearInterval(interval);
               setTimerInterval(null);
@@ -120,6 +129,7 @@ const Game: React.FC<GameProps> = ({
         </button>
         <button
           onClick={(_) => {
+            toggle_running(false);
             if (interval) {
               clearInterval(interval);
               setTimerInterval(null);
@@ -156,6 +166,8 @@ const mapStateToProps = (state: AppState) => {
     make_cells: make_cells,
     run_iteration: run_iteration,
     make_random_board: make_random_board,
+    toggle_running: toggle_running,
+    running: state.running,
     grid: state.grid,
     rect: state.rect,
     grid_size: state.grid_size,
@@ -172,4 +184,5 @@ export default connect(mapStateToProps, {
   make_cells,
   run_iteration,
   make_random_board,
+  toggle_running,
 })(Game);
