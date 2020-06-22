@@ -7,6 +7,7 @@ export const SET_BOARD = "SET_BOARD";
 export const SET_CELLS = "SET_CELLS";
 export const SET_OFFSET = "SET_OFFSET";
 export const SET_RECT = "SET_RECT";
+export const SET_ITERATIONS = "SET_ITERATION";
 
 export interface AppState {
   cell_size: number;
@@ -16,6 +17,7 @@ export interface AppState {
   cells: Cell[];
   offset: Offset | null;
   rect: DOMRect | null;
+  iterations: number;
 }
 
 interface SetCellSizeAction {
@@ -52,6 +54,11 @@ interface SetRectAction {
   payload: DOMRect;
 }
 
+interface SetIterationAction {
+  type: typeof SET_ITERATIONS;
+  payload: number;
+}
+
 export type AppStatActions =
   | SetCellSizeAction
   | SetGridAction
@@ -59,4 +66,5 @@ export type AppStatActions =
   | SetBoardAction
   | SetCellsAction
   | SetOffsetAction
-  | SetRectAction;
+  | SetRectAction
+  | SetIterationAction;

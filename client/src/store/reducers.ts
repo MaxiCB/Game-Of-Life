@@ -8,6 +8,7 @@ import {
   SET_RECT,
   AppState,
   AppStatActions,
+  SET_ITERATIONS,
 } from "./types";
 
 export const initialState: AppState = {
@@ -21,6 +22,7 @@ export const initialState: AppState = {
   cells: [],
   offset: null,
   rect: null,
+  iterations: 0,
 };
 
 export const reducer = (
@@ -62,6 +64,11 @@ export const reducer = (
       return {
         ...state,
         rect: action.payload,
+      };
+    case SET_ITERATIONS:
+      return {
+        ...state,
+        iterations: action.payload,
       };
     default:
       return state;

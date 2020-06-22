@@ -8,19 +8,12 @@ import {
   get_element_offset,
   run_iteration,
   handle_board_click,
+  make_random_board,
 } from "../store/actions";
 // Components
 import GameCell from "../components/Cell";
 // Types and Utils
-import { Cell, Grid, GameType, Offset } from "../types";
-import {
-  makeEmptyBoard,
-  handleBoardClick,
-  getElementOffset,
-  makeRandom,
-  makeCells,
-  runIteration,
-} from "../utils";
+import { Cell, Grid, GameType } from "../types";
 import { AppState } from "../store/types";
 
 interface GameProps {
@@ -29,11 +22,13 @@ interface GameProps {
   get_element_offset: typeof get_element_offset;
   make_cells: typeof make_cells;
   run_iteration: typeof run_iteration;
+  make_random_board: typeof make_random_board;
   grid: GameType;
   rect: DOMRect | null;
   grid_size: Grid;
   cell_size: number;
   cells: Cell[];
+  iterations: number;
 }
 
 const Game: React.FC<GameProps> = ({
@@ -42,15 +37,18 @@ const Game: React.FC<GameProps> = ({
   get_element_offset,
   make_cells,
   run_iteration,
+  make_random_board,
   grid,
   rect,
   grid_size,
   cell_size,
   cells,
+  iterations,
 }) => {
   const [interval, setTimerInterval] = React.useState<NodeJS.Timeout | null>(
     null
   );
+  const [speed, setSpeed] = React.useState<number>(300);
 
   React.useEffect(() => {
     make_empty_board();
@@ -63,7 +61,7 @@ const Game: React.FC<GameProps> = ({
     let temp = setInterval(() => {
       run_iteration();
       make_cells();
-    }, 300);
+    }, speed);
     setTimerInterval(temp);
   };
 
@@ -99,7 +97,8 @@ const Game: React.FC<GameProps> = ({
           />
         ))}
       </div>
-      <div className="controller">
+      <div className="controls">
+        <h2>Iterations: {iterations}</h2>
         <button
           onClick={(_) => {
             run_iteration();
@@ -119,6 +118,31 @@ const Game: React.FC<GameProps> = ({
         >
           Stop
         </button>
+        <button
+          onClick={(_) => {
+            if (interval) {
+              clearInterval(interval);
+              setTimerInterval(null);
+            }
+            make_empty_board();
+            make_cells();
+          }}
+        >
+          Clear
+        </button>
+        <button
+          onClick={(_) => {
+            make_random_board();
+            make_cells();
+          }}
+        >
+          Random
+        </button>
+        Speed:{" "}
+        <input
+          type="number"
+          onChange={(e) => setSpeed(parseInt(e.target.value, 10) * 10)}
+        />
       </div>
     </div>
   );
@@ -131,11 +155,13 @@ const mapStateToProps = (state: AppState) => {
     get_element_offset: get_element_offset,
     make_cells: make_cells,
     run_iteration: run_iteration,
+    make_random_board: make_random_board,
     grid: state.grid,
     rect: state.rect,
     grid_size: state.grid_size,
     cell_size: state.cell_size,
     cells: state.cells,
+    iterations: state.iterations,
   };
 };
 
@@ -145,4 +171,5 @@ export default connect(mapStateToProps, {
   get_element_offset,
   make_cells,
   run_iteration,
+  make_random_board,
 })(Game);

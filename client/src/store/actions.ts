@@ -6,6 +6,7 @@ import {
   SET_CELLS,
   SET_OFFSET,
   SET_RECT,
+  SET_ITERATIONS,
 } from "./types";
 
 import { Dispatch } from "redux";
@@ -34,7 +35,32 @@ export const make_empty_board = () => (
     }
   }
   dispatch({ type: SET_BOARD, payload: temp });
+  dispatch({ type: SET_ITERATIONS, payload: 0 });
   return temp;
+};
+
+// Creation of the empty board
+export const make_random_board = () => (
+  dispatch: Dispatch,
+  getState: () => AppState
+): any => {
+  // Grabbing the grid from state
+  const state = getState();
+  const grid = state.grid;
+  // Temporary holder of the grid we will create
+  let temp: boolean[][] = [];
+  // Iterating over rows
+  for (let y = 0; y < grid.rows; y++) {
+    // Setting the y/row to empty array
+    temp[y] = [];
+    // Iterating over all cols
+    for (let x = 0; x < grid.cols; x++) {
+      // Adding cell state to [y][x]
+      temp[y][x] = Math.random() >= 0.5;
+    }
+  }
+  dispatch({ type: SET_BOARD, payload: temp });
+  dispatch({ type: SET_ITERATIONS, payload: 0 });
 };
 
 // Setting of the cells
@@ -182,4 +208,5 @@ export const run_iteration = () => (
   }
 
   dispatch({ type: SET_BOARD, payload: new_board });
+  dispatch({ type: SET_ITERATIONS, payload: state.iterations += 1 });
 };
