@@ -4,7 +4,7 @@ import { CellProps } from "../types";
 const colorSwitch = (state: string) => {
   switch (state) {
     case "alive":
-      return "green";
+      return "#2FB5FC";
     case "dying":
       return "red";
     default:
@@ -22,6 +22,7 @@ const GameCell: React.FC<CellProps> = ({ state, size, x, y }) => {
         left: `${size * x + 1}px`,
         top: `${size * y + 1}px`,
         background: colorSwitch(state),
+        borderRadius: "10%",
       }}
     />
   );

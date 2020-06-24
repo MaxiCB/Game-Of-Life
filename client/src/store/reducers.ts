@@ -11,14 +11,19 @@ import {
   SET_ITERATIONS,
   SET_RUNNING,
 } from "./types";
+import { Grid, GameType } from "../types";
+
+const intialGrid: Grid = { width: 800, height: 800 };
+const intiailCellSize: number = 20;
+const initialGame: GameType = {
+  rows: intialGrid.width / intiailCellSize,
+  cols: intialGrid.height / intiailCellSize,
+};
 
 export const initialState: AppState = {
-  cell_size: 20,
-  grid: {
-    rows: 800 / 20,
-    cols: 800 / 20,
-  },
-  grid_size: { width: 800, height: 800 },
+  cell_size: intiailCellSize,
+  grid: initialGame,
+  grid_size: intialGrid,
   board: [],
   cells: [],
   offset: null,

@@ -1,13 +1,12 @@
 import {
   SET_CELL_SIZE,
-  SET_GRID_SIZE,
-  SET_GRID,
   SET_BOARD,
   SET_CELLS,
   SET_OFFSET,
   SET_RECT,
   SET_ITERATIONS,
   SET_RUNNING,
+  SET_GRID,
 } from "./types";
 
 import { Dispatch } from "redux";
@@ -213,4 +212,17 @@ export const run_iteration = () => (
 
 export const toggle_running = (state: boolean) => (dispatch: Dispatch) => {
   dispatch({ type: SET_RUNNING, payload: state });
+};
+
+export const set_cell_size = (size: number) => (
+  dispatch: Dispatch,
+  getState: () => AppState
+) => {
+  const state = getState();
+  dispatch({ type: SET_CELL_SIZE, payload: size });
+  const new_grid: GameType = {
+    rows: state.grid_size.width / size,
+    cols: state.grid_size.height / size,
+  };
+  dispatch({ type: SET_GRID, payload: new_grid });
 };

@@ -1,17 +1,43 @@
+* {
+  background-color: #F2F6FF;
+}
+
 .board {
   position: relative;
   margin: 0 auto;
-  background-color: #000;
+  background-color: #1A2151;
   background-image:
-    linear-gradient(#333 1px, transparent 1px),
-    linear-gradient(90deg, #333 1px, transparent 1px);
+    linear-gradient(#F2F6FF 1px, transparent 1px),
+    linear-gradient(90deg, #F2F6FF 1px, transparent 1px);
+  border-radius: 10px;
 }
 
 .button {
   margin-left: 12px;
   cursor: pointer;
+  background-color: #3913B8;
+  border: #F2F6FF;
+  border-radius: 10px;
+  -webkit-box-shadow: -1px 5px 10px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: -1px 5px 10px rgba(0, 0, 0, 0.75);
+  box-shadow: -1px 5px 10px rgba(0, 0, 0, 0.75);
+  width: 122px;
+  height: 44px;
+  color: white;
+  font-weight: bolder;
+  font-family: monospace;
+  font-size: 15px;
+}
+
+.rules {
+  margin: 0 auto;
 }
 
 .controls {
+  text-align: center;
   margin-top: 20px;
+  color: black;
+  font-weight: bolder;
+  font-family: monospace;
+  font-size: 15px;
 }
