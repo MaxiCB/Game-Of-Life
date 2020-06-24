@@ -1,5 +1,7 @@
 * {
   background-color: #F2F6FF;
+  font-weight: bolder;
+  font-family: monospace;
 }
 
 .board {
@@ -24,8 +26,20 @@
   width: 122px;
   height: 44px;
   color: white;
-  font-weight: bolder;
-  font-family: monospace;
+  font-size: 15px;
+}
+
+.input {
+  margin-left: 12px;
+  cursor: pointer;
+  border: #F2F6FF;
+  border-radius: 5px;
+  -webkit-box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.75);
+  width: 122px;
+  height: 22px;
+  color: black;
   font-size: 15px;
 }
 
@@ -37,7 +51,5 @@
   text-align: center;
   margin-top: 20px;
   color: black;
-  font-weight: bolder;
-  font-family: monospace;
   font-size: 15px;
 }

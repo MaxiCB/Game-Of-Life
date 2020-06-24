@@ -100,17 +100,42 @@ const Controls: React.FC<ControlProps> = ({
       <Button title={"Stop"} action={stop_game} />
       <Button title={"Clear"} action={clear_game} />
       <Button title={"Randomize"} action={make_random} />
-      Speed:{" "}
-      <input
-        type="number"
-        onChange={(e) => setSpeed(parseInt(e.target.value, 10) * 10)}
-      />
-      Cell Size:
-      <input
-        type="number"
-        onChange={(e) => setSize(parseInt(e.target.value, 10))}
-      />
-      <Button title={"Set Size"} action={set_cell} />
+      <div
+        style={{
+          margin: "20px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <p>Speed: </p>
+        <select
+          name="speeds"
+          id="speeds"
+          className="input"
+          defaultValue="300"
+          onChange={(e) => setSpeed(parseInt(e.target.value, 10))}
+        >
+          <option value="400">Slow</option>
+          <option value="300">Normal</option>
+          <option value="200">Fast</option>
+          <option value="100">Insane</option>
+        </select>
+        <p style={{ marginLeft: "20px" }}>Cell Size: </p>
+        <select
+          name="sizes"
+          id="sizes"
+          className="input"
+          defaultValue="20"
+          onChange={(e) => setSize(parseInt(e.target.value, 10))}
+        >
+          <option value="10">Small</option>
+          <option value="20">Normal</option>
+          <option value="40">Large</option>
+          <option value="80">Giant</option>
+        </select>
+      </div>
+      <Button title={"Update Size/Speed"} action={set_cell} />
     </div>
   );
 };
