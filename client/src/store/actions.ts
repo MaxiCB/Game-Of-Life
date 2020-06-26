@@ -199,7 +199,7 @@ export const run_iteration = () => (
         }
         // If cell is dead and has 3 neighbors revive
       } else {
-        if (!state.board[y][x] && neighbors === 3) {
+        if (neighbors === 3) {
           new_board[y][x] = true;
         }
       }
@@ -225,4 +225,22 @@ export const set_cell_size = (size: number) => (
     cols: state.grid_size.height / size,
   };
   dispatch({ type: SET_GRID, payload: new_grid });
+};
+
+export const make_glider = () => (
+  dispatch: Dispatch,
+  getState: () => AppState
+) => {
+  const glider_dirs = [
+    [0, -1],
+    [0, 1],
+    [1, 0],
+    [1, 1],
+    [-1, 1],
+  ];
+  const state = getState();
+  let middle = state.board.length / 2 - 1;
+  glider_dirs.forEach((item) => {
+    state.board[middle + item[0]][middle + item[1]] = true;
+  });
 };

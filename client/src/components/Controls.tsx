@@ -10,6 +10,7 @@ import {
   make_random_board,
   toggle_running,
   set_cell_size,
+  make_glider,
 } from "../store/actions";
 import { GameType, Grid, Cell } from "../types";
 import { AppState } from "../store/types";
@@ -24,6 +25,7 @@ interface ControlProps {
   make_random_board: typeof make_random_board;
   toggle_running: typeof toggle_running;
   set_cell_size: typeof set_cell_size;
+  make_glider: typeof make_glider;
   running: boolean;
   grid: GameType;
   rect: DOMRect | null;
@@ -40,6 +42,7 @@ const Controls: React.FC<ControlProps> = ({
   make_random_board,
   toggle_running,
   set_cell_size,
+  make_glider,
   grid_size,
   cell_size,
   cells,
@@ -92,6 +95,11 @@ const Controls: React.FC<ControlProps> = ({
     set_cell_size(size);
   };
 
+  const do_thing = () => {
+    make_glider();
+    make_cells();
+  };
+
   return (
     <div className="controls">
       <h2>Iterations: {iterations}</h2>
@@ -100,6 +108,7 @@ const Controls: React.FC<ControlProps> = ({
       <Button title={"Stop"} action={stop_game} />
       <Button title={"Clear"} action={clear_game} />
       <Button title={"Randomize"} action={make_random} />
+      <Button title={"Glider"} action={do_thing} />
       <div
         style={{
           margin: "20px",
@@ -150,6 +159,7 @@ const mapStateToProps = (state: AppState) => {
     make_random_board: make_random_board,
     toggle_running: toggle_running,
     set_cell_size: set_cell_size,
+    make_glider: make_glider,
     running: state.running,
     grid: state.grid,
     rect: state.rect,
@@ -169,4 +179,5 @@ export default connect(mapStateToProps, {
   make_random_board,
   toggle_running,
   set_cell_size,
+  make_glider,
 })(Controls);

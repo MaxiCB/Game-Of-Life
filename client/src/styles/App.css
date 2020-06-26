@@ -8,6 +8,7 @@
   position: relative;
   margin: 0 auto;
   background-color: #1A2151;
+  /* display: block; */
   background-image:
     linear-gradient(#F2F6FF 1px, transparent 1px),
     linear-gradient(90deg, #F2F6FF 1px, transparent 1px);
@@ -30,6 +31,7 @@
 }
 
 .input {
+  margin-top: 20px;
   margin-left: 12px;
   cursor: pointer;
   border: #F2F6FF;
